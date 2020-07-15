@@ -29,21 +29,14 @@ print()
 
 # 斗地主发牌
 # 三个玩家
-a = []
-b = []
-c = []
+a = poker[0:51:3]
+b = poker[1:51:3]
+c = poker[2:51:3]
 # 三张底牌
 d = poker[51:]
 # 随机选出地主牌
 rr = randint(0, 50)
 ll = poker[rr]
-# 发牌
-for i in range(0, 51, 3):
-    a.append(poker[i])
-for i in range(1, 51, 3):
-    b.append(poker[i])
-for i in range(2, 51, 3):
-    c.append(poker[i])
 # 判断地主是谁
 print('地主牌是'+ll+', ', end=' ')
 if ll in a:
@@ -56,6 +49,6 @@ if ll in c:
     print('玩家c是地主')
     c += d
 # 打印当前手牌
-print('玩家a:', a)
-print('玩家b:', b)
-print('玩家c:', c)
+print('玩家a:', a, len(a))
+print('玩家b:', b, len(b))
+print('玩家c:', c, len(c))
