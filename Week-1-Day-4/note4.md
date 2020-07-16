@@ -60,3 +60,12 @@
     1. 全局变量: 这个变量在任何地方都可以使用
     2. 局部变量: 在函数体里面定义的变量
     3. `global`和`nonlocal`关键字
+- 程序入口: `if __name__ == '__main__':`
+- 闭包
+- 匿名函数: `lambda [arg1 [,arg2,.....argn]]:expression`
+- 推导式: 
+    1. 列表推导式: `[x for x in range(1, 10)]`
+    2. 元组推导式: `(x for x in range(1, 10))`
+    3. 字典推导式: `{x: x ** 2 for x in range(11) if x % 2 == 0}`
+- 可迭代的概念
+
