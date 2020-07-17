@@ -2,7 +2,7 @@ from collections.abc import Iterable
 
 # 判断一个对象是可迭代
 # 可迭代并不意味着这个对象是迭代器
-# 可迭代意味着可以用在 for...in 语句
+# 可迭代意味着可以用在 for...in 语句中
 print(isinstance([1, 2, 3], Iterable))
 print(isinstance((1, 2, 3), Iterable))
 print(isinstance({1: 4, 2: 5, 3: 6}, Iterable))
