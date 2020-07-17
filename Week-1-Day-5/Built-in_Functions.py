@@ -32,3 +32,18 @@ def trans(a: int) -> str:
 print(trans(12345))
 
 # 数字转汉字货币
+def yuan(a: int) -> str:
+    a = str(a)
+    unit = ['元', '拾', '佰', '仟', '万', 
+            '拾万', '佰万', '仟万', '亿']
+    word = ['零', '壹', '贰', '叁', '肆', 
+            '伍', '陆', '柒', '捌', '玖']
+    res = ''
+    # l = len(a)
+    # for i in a:
+    #     l -= 1
+    #     i = int(i)
+    #     res += word[i] + unit[i]
+    return res
+
+print(yuan(12345))
