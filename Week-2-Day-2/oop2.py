@@ -20,12 +20,11 @@ class D(object):
 
 
 class E(D):
-    def hello(self):
-        print('Hello, I am E')
+    pass
 
 
 # 多继承
-class C(A, B, E):
+class C(E, A, B):
     pass
 
 
@@ -34,3 +33,4 @@ if __name__ == "__main__":
     c.test()
     c.demo()
     c.hello()
+    print(C.__mro__)
