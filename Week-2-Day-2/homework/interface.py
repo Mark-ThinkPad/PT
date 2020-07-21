@@ -1,7 +1,9 @@
 import os
-from data import (get_product_list, edit_product,
-                  get_user_list)
+from time import sleep
 from prettytable import PrettyTable
+from data import (get_product_list, edit_product,
+                  get_user_list, add_product,
+                  delete_product)
 
 
 class Interface:
@@ -69,9 +71,9 @@ class AdminProductInterface(Interface):
         if choice == '1':
             AdminProductListInterface().run()
         elif choice == '2':
-            UnfinishedInterface().run()
+            AdminProductAddInterface().run()
         elif choice == '3':
-            UnfinishedInterface().run()
+            AdminProductDeleteInterface().run()
         elif choice == '4':
             AdminProductEditInterface().run()
 
@@ -85,6 +87,37 @@ class AdminProductListInterface(Interface):
         for p in product_list:
             tb.add_row([p["id"], p["name"], p["price"], p["category"], p["num"]])
         print(tb)
+
+
+# 3.2.2.2 增加商品界面
+class AdminProductAddInterface(Interface):
+    def __init__(self):
+        self.title = "新增商品"
+        self.opt_tips = "请输入新的商品编号, 按q键返回: "
+
+    def handler_user_choice(self, choice):
+        pid = choice
+        name = input('请输入商品名: ')
+        price = input('请输入价格: ')
+        category = input('请输入类别: ')
+        num = input('请输入库存数量: ')
+        add_product(pid, name, price, category, num)
+
+
+# 3.2.2.3 删除商品界面
+class AdminProductDeleteInterface(AdminProductListInterface):
+    def __init__(self):
+        self.title = "请输入您要删除的商品的编号: "
+        self.opt_tips = "请输入您要删除的商品编号，按q键返回："
+
+    def handler_user_choice(self, choice):
+        pid = choice
+        res = delete_product(pid)
+        if res:
+            print('删除成功')
+        else:
+            print('商品编号不存在, 未做任何删除')
+        sleep(3)
 
 
 # 3.2.2.4 更新(修改)商品信息界面
@@ -105,6 +138,7 @@ class AdminProductEditInterface(AdminProductListInterface):
             print('商品编号不存在, 未作任何修改')
         else:
             print('修改成功')
+        sleep(3)
 
 
 # 3.2.3 查看用户信息(列表)界面
