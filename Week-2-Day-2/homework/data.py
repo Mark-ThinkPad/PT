@@ -37,7 +37,7 @@ product_list = [
     {
         'id': 1,
         'name': '辣条',
-        'price': '10',
+        'price': 10,
         'category': '零食',
         'num': 100
     },

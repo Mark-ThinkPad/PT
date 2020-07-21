@@ -1,4 +1,4 @@
-from interface import Interface, AdminInterface, AdminProductListInterface
+from interface import AdminInterface
 
 
 def main():
