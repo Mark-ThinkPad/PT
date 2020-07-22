@@ -4,14 +4,14 @@ DB_PATH = 'test.db'
 
 
 # 查询方法的封装
-def fetch_one(sql_str: str) -> dict:
+def fetch_one(sql: str) -> dict:
     """
-    :param sql_str: SQL查询语句字符串
+    :param sql: SQL查询语句字符串
     :return: 以字典的形式返回单个查询结果
     """
     con = sqlite3.connect(DB_PATH)
     c = con.cursor()
-    c.execute(sql_str)
+    c.execute(sql)
     result = c.fetchone()
     if not result:
         return None
@@ -20,14 +20,14 @@ def fetch_one(sql_str: str) -> dict:
     return dic
 
 
-def fetch_all(sql_str: str) -> list:
+def fetch_all(sql: str) -> list:
     """
-    :param sql_str: SQL查询语句字符串
+    :param sql: SQL查询语句字符串
     :return: 以列表的形式返回所有查询结果
     """
     con = sqlite3.connect(DB_PATH)
     c = con.cursor()
-    c.execute(sql_str)
+    c.execute(sql)
     result = c.fetchall()
     if not result:
         return None
