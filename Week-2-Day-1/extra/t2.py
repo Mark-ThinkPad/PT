@@ -8,4 +8,4 @@ print('\n'.join(' '.join(i) for i in [[li[j][k]
     for k in range(len(li[0]))]))
 
 # 来波炫技
-print('\n'.join(' '.join(i) for i in zip((*li))))
+print('\n'.join(' '.join(i) for i in zip(*li)))
