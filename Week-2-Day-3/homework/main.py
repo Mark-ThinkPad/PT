@@ -1,8 +1,8 @@
-from interface import AdminInterface
+from interface import GuideInterface
 
 
 def main():
-    i = AdminInterface()
+    i = GuideInterface()
     i.run()
 
 

@@ -26,3 +26,16 @@ class UserMixin:
 
     def print_line(self):
         pass
+
+
+class GuideMixin:
+    def print_line(self):
+        pass
+
+    def get_opt_tips(self):
+        return '按回车继续, 按q键返回上一级: '
+
+    def get_info(self) -> tuple:
+        username = input('请输入用户名: ')
+        password = input('请输入密码: ')
+        return username, password
