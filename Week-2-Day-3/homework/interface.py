@@ -1,9 +1,8 @@
 import os
 from time import sleep
-from prettytable import PrettyTable
-from mixin import ProductMixin
-from data import (get_product_list, edit_product, delete_product,
-                  add_product, get_user_list)
+from mixin import ProductMixin, UserMixin
+from sql_methods import add_one
+from data import (edit_product, delete_product, add_product)
 
 
 class Interface:
@@ -93,7 +92,7 @@ class AdminProductListInterface(ProductMixin, Interface):
         return '商品列表'
 
     def get_opt_tips(self):
-        return '按q键返回上级：'
+        return '按q键返回上一级：'
 
 
 # 3.2.2.2 增加商品界面
@@ -102,15 +101,27 @@ class AdminProductAddInterface(Interface):
         return '新增商品'
 
     def get_opt_tips(self):
-        return '请输入新的商品编号, 按q键返回: '
+        return '按回车开始输入商品信息, 按q键返回: '
 
     def handler_user_choice(self, choice):
-        pid = choice
-        name = input('请输入商品名: ')
-        price = input('请输入价格: ')
-        category = input('请输入类别: ')
-        num = input('请输入库存数量: ')
-        add_product(pid, name, price, category, num)
+        if choice == '':
+            name = input('请输入商品名: ')
+            price = float(input('请输入价格: '))
+            category = input('请输入类别: ')
+            num = int(input('请输入库存数量: '))
+            sql = f"""
+            insert into product (name, price, category, num)
+            values ('{name}', {price}, '{category}', {num})
+            """
+            res = add_one(sql)
+            if res:
+                print('商品添加成功, 即将跳转至商品列表')
+                sleep(2)
+                AdminProductListInterface().run()
+            else:
+                print('商品添加失败, 即将刷新页面')
+                sleep(2)
+
 
 
 # 3.2.2.3 删除商品界面
@@ -146,20 +157,9 @@ class AdminProductUpdateInterface(ProductMixin, Interface):
 
 
 # 3.2.3 查看用户信息(列表)界面
-class AdminUserListInterface(Interface):
+class AdminUserListInterface(UserMixin, Interface):
     def get_title(self):
-        return '用户情况如下: '
+        return '用户列表'
 
     def get_opt_tips(self):
         return '按q键返回上级：'
-
-    def print_menu(self):
-        user_list = get_user_list()
-        tb = PrettyTable()
-        tb.field_names = ['编号', '用户名', '密码', '角色']
-        for u in user_list:
-            tb.add_row([u['id'], u['username'], u['password'], u['role']])
-        print(tb)
-
-    def print_line(self):
-        pass
