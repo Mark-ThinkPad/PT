@@ -39,6 +39,23 @@ def fetch_all(sql: str) -> list:
     return li
 
 
+def insert(tab_name, **kwargs):
+    """
+    提供一个通用的数据库插入方法
+    :param tab_name: 要插入数据的表名
+    :param kwargs: 要插入的数据
+    :return:
+    """
+    pass
+
+
+def update(tab_name, id, **kwargs):
+    param = ','.join(['%s = ?' % k for k in kwargs.keys()])
+    sql = "update %s set %s where id = %s" % (tab_name, param, id)
+    print(sql)
+    return dml(sql, *kwargs.values())
+
+
 if __name__ == '__main__':
     print(fetch_all('select * from test'))
     print(fetch_one('select * from test'))
