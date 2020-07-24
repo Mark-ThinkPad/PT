@@ -5,14 +5,15 @@
   <meta name="viewport"
         content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>我的书籍</title>
+  <title>书籍详情</title>
 </head>
 <body>
-  <h1>{{ title }}</h1>
+  <h1>{{ book.title }}</h1>
   <hr>
+  <p>书籍人物介绍</p>
   <ul>
-  {% for book in book_list %}
-    <li><a href="/{{ book.id }}">{{ book.title }}</a></li>
+  {% for hero in book.hero_set.all %}
+    <li>{{ hero.name }} --- {{ hero.comment }}</li>
   {% endfor %}
   </ul>
 </body>

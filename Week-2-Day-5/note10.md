@@ -10,3 +10,4 @@
 ## 下午
 
 - 写作业
+- 作业见 `/example-Django/mybook` 文件夹
