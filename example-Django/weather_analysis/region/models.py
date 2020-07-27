@@ -4,7 +4,7 @@ from django.db import models
 class Region(models.Model):
     id = models.IntegerField('区域编号', primary_key=True)
     name = models.CharField('区域名称', max_length=30, null=False, blank=False)
-    # 自关联, null=True设置的是数据库中的表定义
+    # 自关联, null=True设置的是数据库中的表定义相应字段可以为空
     # verbose_name 是说明字段
     # related_name 用于指定一找多时使用的名称
     parent = models.ForeignKey('self', verbose_name='父级区域',
