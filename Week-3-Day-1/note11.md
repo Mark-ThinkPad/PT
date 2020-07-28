@@ -19,3 +19,4 @@
 ## 下午
 
 - 写作业
+- 作业见 `/example-Django/weather_analysis` 文件夹
