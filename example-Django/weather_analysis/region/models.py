@@ -28,6 +28,17 @@ class Region(models.Model):
     def __str__(self):
         return self.name
 
+    # 获取区域的省的名称
+    def get_province_name(self):
+        if self.level == '0':
+            return self.name
+        elif self.level == '1':
+            return self.parent.name
+        elif self.level == '2':
+            return self.parent.parent.name
+        else:
+            return self.name
+
     class Meta:
         verbose_name = '区域信息'
         verbose_name_plural = verbose_name

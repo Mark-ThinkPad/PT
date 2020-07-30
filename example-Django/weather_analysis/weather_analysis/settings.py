@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'region.apps.RegionConfig',
+    'weather_data.apps.WeatherDataConfig'
 ]
 
 MIDDLEWARE = [
@@ -120,3 +121,19 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
 STATIC_URL = '/static/'
+
+
+# Tencent Weather
+TX_WEATHER_URL = 'https://wis.qq.com/weather/common'
+
+TX_WEATHER_PARAMS = {
+    'source': 'pc',
+    'weather_type': 'forecast_24h',
+    'province': '湖北省',
+    'city': '十堰市'
+}
+
+TX_WEATHER_HEADERS = {
+    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) '
+                  'Chrome/84.0.4147.105 Safari/537.36 '
+}

@@ -1,23 +1,15 @@
-import os
-import django
 import csv
-
-# 手动启动 Django
-# 配置环境变量
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'weather_analysis.settings')
-# 启动 Django
-django.setup()
-# 需要在 Django 启动之后导入 Region 模型, 否则会报错
-from region.models import Region
+import util
 from django.db.models import Q
+from region.models import Region
 
 
 # 生成区域 level
 def generate_region_level():
     print(Region.objects.filter(parent_id=0).exclude(id=0).update(level='0'))
     print(Region.objects.filter(parent__level='0').update(level='1'))
-    print(Region.objects.filter(parent__level='2').update(level='2'))
-    print(Region.objects.filter(parent__level='3').update(level='3'))
+    print(Region.objects.filter(parent__level='1').update(level='2'))
+    print(Region.objects.filter(parent__level='2').update(level='3'))
 
 
 # 生成直辖市

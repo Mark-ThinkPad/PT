@@ -15,7 +15,9 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from weather_data.views import region_weather
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('region/<int:region_id>', region_weather),
 ]
