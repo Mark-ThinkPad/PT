@@ -1,16 +1,81 @@
 <!doctype html>
-<html lang="zh-cn">
+<html lang="zh-CN">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport"
         content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
   <title>全国城市天气</title>
 </head>
 <body>
-  <h3>{{ region.name }}</h3>
-  <table border="1">
-    <thead>
+  <header>
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
+                  data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#">景点城市天气推荐系统</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+          <ul class="nav navbar-nav">
+            <li class="active"><a href="#">景点推荐</a></li>
+            <li><a href="#">全国天气查询</a></li>
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown"
+                 role="button" aria-haspopup="true" aria-expanded="false">天气分析 <span class="caret"></span></a>
+              <ul class="dropdown-menu">
+                <li><a href="#">最高温</a></li>
+                <li><a href="#">最低温</a></li>
+                <li><a href="#">Something else here</a></li>
+                <li role="separator" class="divider"></li>
+              </ul>
+            </li>
+          </ul>
+        </div><!-- /.navbar-collapse -->
+      </div><!-- /.container-fluid -->
+    </nav>
+  </header>
+
+  <main>
+    <div class="text-primary" style="margin-top: 60px">
+      <h3>
+      {% if region.is_municipality %}
+        {{ region.name }}
+      {% else %}
+        {{ region.get_province_name }} {{ region.name }}
+      {% endif %}
+        <a href="#" class="small" data-toggle="modal" data-target="#exampleModal">[编辑城市]</a>
+      </h3>
+
+      <div>
+      {% if region.latitude and region.longitude %}
+        <span class="label label-primary">北纬: {{ region.latitude }}</span>
+        <span class="label label-primary">东经: {{ region.longitude }}</span>
+      {% endif %}
+      {% if region.is_display %}
+      <span class="label label-warning">在地图上展示</span>
+      {% endif %}
+      {% if region.is_province_capital %}
+      <span class="label label-success">省会城市</span>
+      {% endif %}
+      {% if region.is_municipality %}
+      <span class="label label-success">直辖市</span>
+      {% endif %}
+      </div>
+    </div>
+    <h4>城市未来7日天气预报</h4>
+
+    <table class="table table-striped table-hover">
+      <thead>
       <tr>
         <td>日期</td>
         <td>天气</td>
@@ -19,19 +84,56 @@
         <td>风向</td>
         <td>风力</td>
       </tr>
-    </thead>
-    <tbody>
-    {% for d in data %}
-    <tr>
-      <td>{{ d.time }}</td>
-      <td>{{ d.day_weather }}</td>
-      <td>{{ d.max_degree }}</td>
-      <td>{{ d.min_degree }}</td>
-      <td>{{ d.day_wind_direction }}</td>
-      <td>{{ d.day_wind_power }}</td>
-    </tr>
-    {% endfor %}
-    </tbody>
-  </table>
+      </thead>
+      <tbody>
+      {% for d in data %}
+        <tr>
+          <td>{{ d.time }}</td>
+          <td>{{ d.day_weather }}</td>
+          <td>{{ d.max_degree }}</td>
+          <td>{{ d.min_degree }}</td>
+          <td>{{ d.day_wind_direction }}</td>
+          <td>{{ d.day_wind_power }}</td>
+        </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  </main>
+
+  <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title" id="exampleModalLabel">编辑城市: {{ region.name }}信息</h4>
+        </div>
+        <div class="modal-body">
+          <form method="post">
+          {% csrf_token %}
+            <div class="form-group">
+              <label class="control-label">纬度:</label>
+              <input type="text" class="form-control" name="latitude" value="{{ region.latitude }}">
+            </div>
+            <div class="form-group">
+              <label class="control-label">经度:</label>
+              <input type="text" class="form-control" name="longitude" value="{{ region.longitude }}">
+            </div>
+            <div class="form-group">
+              <label class="control-label">是否在地图上展示:</label>
+              <input type="checkbox" name="is_display" {% if region.is_display %}checked{% endif %} >
+            </div>
+
+            <div class="modal-footer">
+              <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+              <button type="submit" class="btn btn-primary">保存信息</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js"></script>
 </body>
 </html>
