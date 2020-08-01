@@ -15,9 +15,15 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from django.conf.urls.static import static
+from weather_analysis import settings
 from weather_data.views import region_weather
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('region/<int:region_id>', region_weather),
 ]
+
+# 配置静态文件的路由（从配置文件里读取配置项再进行操作）：
+if settings.DEBUG:
+    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATICFILES_DIRS)
