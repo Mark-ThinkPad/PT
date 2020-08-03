@@ -3,7 +3,7 @@ from django.contrib import messages
 from region.models import Region
 from weather_data.models import WeatherData
 from weather_data.forms import RegionForm
-from util.weather_spider import delete_weather_by_region
+from util.weather_spider import delete_weather_by_region, get_weather_by_region
 from weather_analysis.settings import WEATHER_DATE_START, WEATHER_DATE_END
 
 
@@ -27,7 +27,12 @@ def region_weather(request, region_id):
     data = WeatherData.objects.filter(region_id=region_id,
                                       time__range=(WEATHER_DATE_START, WEATHER_DATE_END))
     if data.count() < 8:
-        pass
+        delete_weather_by_region(region)
+        new_data = get_weather_by_region(region)
+        for v in new_data.values():
+            WeatherData.objects.create(region=region, **v)
+        data = WeatherData.objects.filter(region_id=region_id,
+                                          time__range=(WEATHER_DATE_START, WEATHER_DATE_END))
 
     context = {'region': region, 'data': data, 'region_list': region_list}
     return render(request, 'weather_table.html', context)
