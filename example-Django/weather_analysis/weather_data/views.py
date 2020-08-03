@@ -1,5 +1,6 @@
 from django.shortcuts import render, HttpResponseRedirect
 from django.contrib import messages
+from datetime import datetime, timedelta
 from region.models import Region
 from weather_data.models import WeatherData
 from weather_data.forms import RegionForm
@@ -36,3 +37,30 @@ def region_weather(request, region_id):
 
     context = {'region': region, 'data': data, 'region_list': region_list}
     return render(request, 'weather_table.html', context)
+
+
+def max_degree(request):
+    region_list = Region.objects.filter(is_display=True)
+    data = []
+    # 生成最高温的数据列表
+    for r in region_list:
+        dic = {'name': r.name,
+               'value': r.weatherdata_set.filter(time=datetime.now() + timedelta(days=1))
+                   .first().max_degree}
+        data.append(dic)
+
+    geo_coord = {}
+    for r in region_list:
+        geo_coord[r.name] = [r.longitude, r.latitude]
+    print(geo_coord)
+
+    context = {
+        'data': data,
+        'geo_coord': geo_coord,
+        'title': '全国主要城市明日高温情况',
+        'num': 1.2,
+        'color': 'orangered',
+        'name': '高温℃'
+    }
+
+    return render(request, 'map.html', context)
