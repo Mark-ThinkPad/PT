@@ -49,6 +49,14 @@
   </header>
 
   <main style="margin-top: 50px; padding: 20px; position: relative">
+    {% for m in messages %}
+      <div class="alert alert-{{ m.extra_tags }} alert-dismissable" role="alert" style="position: absolute; left: 0; top: 0; z-index: 999; width: 100%">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        <span>{{ m }}</span>
+      </div>
+    {% endfor %}
     <nav id="navbar">
       <ul>
       {% for r in region_list %}
@@ -63,9 +71,11 @@
           </a>
           <ul>
           {% for r1 in r.children.all %}
-            <a href="/region/{{ r1.id }}">
-              {{ r1.name }}
-            </a>
+            <li>
+              <a href="/region/{{ r1.id }}">
+                {{ r1.name }}
+              </a>
+            </li>
           {% endfor %}
           </ul>
         {% endif %}
