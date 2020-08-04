@@ -52,7 +52,6 @@ def max_degree(request):
     geo_coord = {}
     for r in region_list:
         geo_coord[r.name] = [r.longitude, r.latitude]
-    print(geo_coord)
 
     context = {
         'data': data,
@@ -61,6 +60,58 @@ def max_degree(request):
         'num': 1.2,
         'color': 'orangered',
         'name': '高温℃'
+    }
+
+    return render(request, 'map.html', context)
+
+
+def min_degree(request):
+    region_list = Region.objects.filter(is_display=True)
+    data = []
+    # 生成最低温的数据列表
+    for r in region_list:
+        dic = {'name': r.name,
+               'value': r.weatherdata_set.filter(time=datetime.now() + timedelta(days=1))
+                   .first().min_degree}
+        data.append(dic)
+
+    geo_coord = {}
+    for r in region_list:
+        geo_coord[r.name] = [r.longitude, r.latitude]
+
+    context = {
+        'data': data,
+        'geo_coord': geo_coord,
+        'title': '全国主要城市明日低温情况',
+        'num': 1.2,
+        'color': 'cyan',
+        'name': '低温℃'
+    }
+
+    return render(request, 'map.html', context)
+
+
+def wind_power(request):
+    region_list = Region.objects.filter(is_display=True)
+    data = []
+    # 生成风力级数的数据列表
+    for r in region_list:
+        dic = {'name': r.name,
+               'value': r.weatherdata_set.filter(time=datetime.now() + timedelta(days=1))
+                   .first().day_wind_power}
+        data.append(dic)
+
+    geo_coord = {}
+    for r in region_list:
+        geo_coord[r.name] = [r.longitude, r.latitude]
+
+    context = {
+        'data': data,
+        'geo_coord': geo_coord,
+        'title': '全国主要城市明日风力情况',
+        'num': 0.2,
+        'color': 'yellow',
+        'name': '风力级数'
     }
 
     return render(request, 'map.html', context)

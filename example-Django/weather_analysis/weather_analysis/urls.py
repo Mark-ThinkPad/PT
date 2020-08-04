@@ -17,12 +17,15 @@ from django.contrib import admin
 from django.urls import path
 from django.conf.urls.static import static
 from weather_analysis import settings
-from weather_data.views import region_weather, max_degree
+from weather_data.views import (region_weather, max_degree, min_degree,
+                                wind_power)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('region/<int:region_id>', region_weather),
     path('max_degree/', max_degree),
+    path('min_degree/', min_degree),
+    path('wind_power/', wind_power),
 ]
 
 # 配置静态文件的路由（从配置文件里读取配置项再进行操作）：
