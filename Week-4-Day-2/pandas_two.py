@@ -14,3 +14,6 @@ print(type(df['b']))
 # 添加列
 df['e'] = df['b'] + 2
 print(df)
+
+# 通过 loc 属性, 根据行索引获取一行数据
+print(df.loc['B'])
