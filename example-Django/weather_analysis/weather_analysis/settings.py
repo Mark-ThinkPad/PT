@@ -139,3 +139,6 @@ from datetime import datetime, timedelta
 
 WEATHER_DATE_START = datetime.now() - timedelta(days=1)
 WEATHER_DATE_END = datetime.now() + timedelta(days=6)
+
+OPTIMUM_MAX_TEMP = 24
+OPTIMUM_MIN_TEMP = 19
