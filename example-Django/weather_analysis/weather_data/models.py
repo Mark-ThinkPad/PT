@@ -24,3 +24,12 @@ class WeatherData(models.Model):
     # 用于记录 天气数据是什么时候插入数据库的
     # auto_now_add 自动的将 创建数据的时间 插入字段
     created = models.DateTimeField(auto_now_add=True)
+
+
+class WeatherResult(models.Model):
+    region = models.ForeignKey(Region, on_delete=models.CASCADE)
+    result = models.FloatField()
+    created = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['-created']

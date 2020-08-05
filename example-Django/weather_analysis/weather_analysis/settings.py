@@ -142,3 +142,10 @@ WEATHER_DATE_END = datetime.now() + timedelta(days=6)
 
 OPTIMUM_MAX_TEMP = 24
 OPTIMUM_MIN_TEMP = 19
+
+WEIGHTS_DICT = {
+    'max_degree': 5,
+    'min_degree': 5,
+    'day_wind_power': 3,
+    'day_weather_code': 3
+}

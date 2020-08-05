@@ -1,7 +1,7 @@
 import util
 from region.models import Region
-from weather_data.models import WeatherData
-from weather_analysis.settings import OPTIMUM_MAX_TEMP, OPTIMUM_MIN_TEMP
+from weather_data.models import WeatherData, WeatherResult
+from weather_analysis.settings import OPTIMUM_MAX_TEMP, OPTIMUM_MIN_TEMP, WEIGHTS_DICT
 from pandas import DataFrame
 import pandas as pd
 import numpy as np
@@ -40,12 +40,13 @@ def wind_power_normalization(level):
         return 0
 
 
+# 针对天气code做归一化处理
 def weather_type_normalization(code):
     if code in ['00', '01', '02']:
         return 1
-    elif code in ['04', '07', '08', '18', '21']:
+    elif code in ['03', '04', '07', '08', '18', '21']:
         return 0.4
-    elif code in ['03', '09', '10', '22', '23', '24']:
+    elif code in ['09', '10', '22', '23', '24']:
         return 0
 
 
@@ -53,7 +54,7 @@ def sigmoid(X):
     return 1.0 / (1 + np.exp(-float(X)))
 
 
-def normalize_region_weather(region: Region):
+def normalize_region_weather(region) -> DataFrame:
     df = get_region_weather_dataframe(region)
     new_df = pd.DataFrame()
     new_df['max_degree'] = 1.5 - (df['max_degree'] - OPTIMUM_MAX_TEMP).abs().apply(sigmoid)
@@ -63,18 +64,16 @@ def normalize_region_weather(region: Region):
     return new_df
 
 
-WEIGHTS_DICT = {
-    'max_degree': 5,
-    'min_degree': 5,
-    'day_wind_power': 3,
-    'day_weather_code': 3
-}
-
-
-def calculate_region_result(region: Region):
+def calculate_region_result(region):
     df = normalize_region_weather(region)
     weights = pd.Series(WEIGHTS_DICT)
     return (df @ weights).sum()
+
+
+def save_display_region_result():
+    region_list = Region.objects.filter(is_display=True)
+    for r in region_list:
+        WeatherResult.objects.create(region=r, result=calculate_region_result(r))
 
 
 if __name__ == '__main__':
@@ -83,5 +82,3 @@ if __name__ == '__main__':
     # print(get_region_weather_date(region))
     df = get_region_weather_dataframe(region)
     print(df)
-    print(normalize_region_weather(region))
-    print(calculate_region_result(region))
