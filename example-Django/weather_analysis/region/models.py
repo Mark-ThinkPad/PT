@@ -4,6 +4,7 @@ from django.db import models
 class Region(models.Model):
     id = models.IntegerField('区域编号', primary_key=True)
     name = models.CharField('区域名称', max_length=30, null=False, blank=False)
+    short_name = models.CharField('区域名称(短)', max_length=30, null=False, blank=False)
     # 自关联, null=True设置的是数据库中的表定义相应字段可以为空
     # verbose_name 是说明字段
     # related_name 用于指定一找多时使用的名称
@@ -27,6 +28,11 @@ class Region(models.Model):
 
     def __str__(self):
         return self.name
+
+    # 初始化 short_name
+    def set_short_name(self):
+        self.short_name = self.name
+        self.save(update_fields=['short_name'])
 
     # 获取区域的省的名称
     def get_province_name(self):

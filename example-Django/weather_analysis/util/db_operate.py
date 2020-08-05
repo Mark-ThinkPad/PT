@@ -52,9 +52,17 @@ def insert_latitude_from_csv():
                 print(f'{r.name} 修改成功!')
 
 
+# 初始化所有 region 的 short_name
+def set_all_short_name():
+    regions = Region.objects.all()
+    for region in regions:
+        region.set_short_name()
+
+
 if __name__ == '__main__':
-    generate_region_level()
-    generate_municipality()
-    generate_province_capital()
-    set_display_region()
-    insert_latitude_from_csv()
+    # generate_region_level()
+    # generate_municipality()
+    # generate_province_capital()
+    # set_display_region()
+    # insert_latitude_from_csv()
+    set_all_short_name()

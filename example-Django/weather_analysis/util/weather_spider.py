@@ -16,7 +16,7 @@ def get_weather_by_region(region: Region):
     """
     params = TX_WEATHER_PARAMS
     params['province'] = region.get_province_name()
-    params['city'] = region.name
+    params['city'] = region.short_name
     res = requests.get(TX_WEATHER_URL, params, headers=TX_WEATHER_HEADERS)
     return res.json()['data']['forecast_24h']
 
