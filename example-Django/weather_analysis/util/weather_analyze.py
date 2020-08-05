@@ -2,9 +2,9 @@ import util
 from region.models import Region
 from weather_data.models import WeatherData, WeatherResult
 from weather_analysis.settings import OPTIMUM_MAX_TEMP, OPTIMUM_MIN_TEMP, WEIGHTS_DICT
+from util.normalization import sigmoid, weather_type_normalization, wind_power_normalization
 from pandas import DataFrame
 import pandas as pd
-import numpy as np
 
 
 # 获取区域未来六天的天气数据 以列表+字典的形式返回数据
@@ -29,31 +29,7 @@ def get_region_weather_dataframe(region: Region) -> DataFrame:
     return pd.DataFrame(data, index=date)
 
 
-def wind_power_normalization(level):
-    if level < 2:
-        return 0.6
-    elif 2 <= level < 4:
-        return 1
-    elif 4 <= level < 6:
-        return 0.3
-    else:
-        return 0
-
-
-# 针对天气code做归一化处理
-def weather_type_normalization(code):
-    if code in ['00', '01', '02']:
-        return 1
-    elif code in ['03', '04', '07', '08', '18', '21']:
-        return 0.4
-    elif code in ['09', '10', '22', '23', '24']:
-        return 0
-
-
-def sigmoid(X):
-    return 1.0 / (1 + np.exp(-float(X)))
-
-
+# 对区域的天气数据进行归一化处理
 def normalize_region_weather(region) -> DataFrame:
     df = get_region_weather_dataframe(region)
     new_df = pd.DataFrame()
@@ -64,6 +40,7 @@ def normalize_region_weather(region) -> DataFrame:
     return new_df
 
 
+# 计算给定城市的推荐指数
 def calculate_region_result(region):
     try:
         df = normalize_region_weather(region)
@@ -73,6 +50,7 @@ def calculate_region_result(region):
         return -1
 
 
+# 将要显示的城市的推荐结果计算出来
 def save_display_region_result():
     region_list = Region.objects.filter(is_display=True)
     for r in region_list:

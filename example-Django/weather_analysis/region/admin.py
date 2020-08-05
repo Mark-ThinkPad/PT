@@ -6,3 +6,4 @@ from region import models
 class RegionAdmin(admin.ModelAdmin):
     list_display = ['id', 'level', 'is_municipality', 'is_province_capital',
                     'is_display', 'name', 'parent']
+    list_editable = ['is_display']

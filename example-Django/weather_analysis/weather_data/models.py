@@ -25,6 +25,10 @@ class WeatherData(models.Model):
     # auto_now_add 自动的将 创建数据的时间 插入字段
     created = models.DateTimeField(auto_now_add=True)
 
+    class Meta:
+        verbose_name = '天气数据'
+        verbose_name_plural = verbose_name
+
 
 class WeatherResult(models.Model):
     region = models.ForeignKey(Region, on_delete=models.CASCADE)
@@ -33,3 +37,5 @@ class WeatherResult(models.Model):
 
     class Meta:
         ordering = ['-created']
+        verbose_name = '天气推荐指数'
+        verbose_name_plural = verbose_name
