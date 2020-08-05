@@ -10,4 +10,4 @@ class WeatherDataAdmin(admin.ModelAdmin):
 
 @admin.register(models.WeatherResult)
 class WeatherResultAdmin(admin.ModelAdmin):
-    list_display = ['region', 'result', 'created']
+    list_display = ['id', 'region', 'result', 'created']

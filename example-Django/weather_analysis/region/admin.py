@@ -8,3 +8,4 @@ class RegionAdmin(admin.ModelAdmin):
                     'is_display', 'name', 'short_name', 'parent']
     list_editable = ['is_display', 'short_name']
     search_fields = ['name', 'short_name']
+    list_filter = ['parent']
