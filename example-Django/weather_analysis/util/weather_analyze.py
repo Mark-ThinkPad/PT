@@ -65,20 +65,25 @@ def normalize_region_weather(region) -> DataFrame:
 
 
 def calculate_region_result(region):
-    df = normalize_region_weather(region)
-    weights = pd.Series(WEIGHTS_DICT)
-    return (df @ weights).sum()
+    try:
+        df = normalize_region_weather(region)
+        weights = pd.Series(WEIGHTS_DICT)
+        return (df @ weights).sum()
+    except:
+        return -1
 
 
 def save_display_region_result():
     region_list = Region.objects.filter(is_display=True)
     for r in region_list:
         WeatherResult.objects.create(region=r, result=calculate_region_result(r))
+        print(f'{r}的结果已保存')
 
 
 if __name__ == '__main__':
-    region = Region.objects.get(name='武汉市')
+    # region = Region.objects.get(name='武汉市')
     # print(get_region_weather_data(region))
     # print(get_region_weather_date(region))
-    df = get_region_weather_dataframe(region)
-    print(df)
+    # df = get_region_weather_dataframe(region)
+    # print(df)
+    save_display_region_result()

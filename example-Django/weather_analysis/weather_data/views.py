@@ -2,10 +2,11 @@ from django.shortcuts import render, HttpResponseRedirect
 from django.contrib import messages
 from datetime import datetime, timedelta
 from region.models import Region
-from weather_data.models import WeatherData
+from weather_data.models import WeatherData, WeatherResult
 from weather_data.forms import RegionForm
-from util.weather_spider import delete_weather_by_region, get_weather_by_region
 from weather_analysis.settings import WEATHER_DATE_START, WEATHER_DATE_END
+from util.weather_spider import delete_weather_by_region, get_weather_by_region
+from util.weather_analyze import calculate_region_result
 
 
 def region_weather(request, region_id):
@@ -35,7 +36,17 @@ def region_weather(request, region_id):
         data = WeatherData.objects.filter(region_id=region_id,
                                           time__range=(WEATHER_DATE_START, WEATHER_DATE_END))
 
-    context = {'region': region, 'data': data, 'region_list': region_list}
+    # 查询该地区是否计算出天气推荐指数
+    if not region.weatherresult_set.filter(created__day=datetime.now().day):
+        WeatherResult.objects.create(region=region, result=calculate_region_result(region))
+
+    context = {
+        'region': region,
+        'data': data,
+        'region_list': region_list,
+        'region_weather': True
+    }
+
     return render(request, 'weather_table.html', context)
 
 
@@ -59,7 +70,8 @@ def max_degree(request):
         'title': '全国主要城市明日高温情况',
         'num': 1.2,
         'color': 'orangered',
-        'name': '高温℃'
+        'name': '高温℃',
+        'max_degree': True
     }
 
     return render(request, 'map.html', context)
@@ -85,7 +97,8 @@ def min_degree(request):
         'title': '全国主要城市明日低温情况',
         'num': 1.2,
         'color': 'cyan',
-        'name': '低温℃'
+        'name': '低温℃',
+        'min_degree': True,
     }
 
     return render(request, 'map.html', context)
@@ -111,7 +124,34 @@ def wind_power(request):
         'title': '全国主要城市明日风力情况',
         'num': 0.2,
         'color': 'yellow',
-        'name': '风力级数'
+        'name': '风力级数',
+        'wind_power': True
+    }
+
+    return render(request, 'map.html', context)
+
+
+def recommend(request):
+    region_list = Region.objects.filter(is_display=True)
+    data = []
+    for r in region_list:
+        dic = {'name': r.name,
+               'value': r.weatherresult_set.first().result}
+        data.append(dic)
+
+    geo_coord = {}
+    for r in region_list:
+        geo_coord[r.name] = [r.longitude, r.latitude]
+
+    context = {
+        'data': data,
+        'geo_coord': geo_coord,
+        'title': '全国主要城市旅游天气指数',
+        'subtitle': '根据未来6天天气情况, 计算出是否适合旅游',
+        'num': 3,
+        'color': 'pink',
+        'name': '推荐指数',
+        'recommend': True
     }
 
     return render(request, 'map.html', context)

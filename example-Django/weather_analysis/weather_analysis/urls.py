@@ -18,10 +18,11 @@ from django.urls import path
 from django.conf.urls.static import static
 from weather_analysis import settings
 from weather_data.views import (region_weather, max_degree, min_degree,
-                                wind_power)
+                                wind_power, recommend)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('', recommend),
     path('region/<int:region_id>', region_weather),
     path('max_degree/', max_degree),
     path('min_degree/', min_degree),
